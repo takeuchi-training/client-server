@@ -75,7 +75,12 @@ Route::middleware('auth')->group(function() {
     Route::get('/callback', function (Request $request) {
         $user = auth()->user();
         $verifier = PassportVerifier::where('user_id', $user->id)->first();
-        PassportVerifier::truncate();
+        $userVerifiers = PassportVerifier::where('user_id', $user->id)->get();
+
+        foreach ($userVerifiers as $userVerifier) {
+            $userVerifier->delete();
+        }
+
         $state = $verifier->state;
         $codeVerifier = $verifier->code_verifier;
 
