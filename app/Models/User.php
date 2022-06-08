@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function passportClients() {
+        return $this->hasMany(PassportClient::class);
+    }
+
+    public function accessTokens() {
+        return $this->hasMany(PassportAccessToken::class);
+    }
 }
