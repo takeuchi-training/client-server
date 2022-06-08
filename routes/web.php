@@ -84,7 +84,7 @@ Route::get('/redirect', function (Request $request) {
     ]);
  
     return redirect('http://127.0.0.1:8000/oauth/authorize?'.$query);
-});
+})->name('redirect');
 
 Route::get('/callback', function (Request $request) {
     // $state = $request->session()->pull('state');
@@ -111,14 +111,16 @@ Route::get('/callback', function (Request $request) {
 
     Cookie::queue(cookie('access_token', $accessTokenResult['access_token'], 9999));
 
-    return $accessTokenResult;
-});
+    // return $accessTokenResult;
+    
+    return redirect()->intended('/get-products-from-api');
+})->name('callback');
 
 Route::get('/get-products-from-api', function (Request $request) {
     $accessToken = $request->cookie('access_token');
 
     if ($accessToken === null) {
-        abort(404);
+        return redirect()->route('redirect');
     }
 
     $response = Http::withHeaders([
@@ -126,12 +128,12 @@ Route::get('/get-products-from-api', function (Request $request) {
     ])->get('http://127.0.0.1:8000/api/products');
  
     return $response->json();
-});
+})->name('getProducts');
 
 Route::get('/delete-cookies', function() {
-    Cookie::forget('state');
-    Cookie::forget('code_verifier');
-    Cookie::forget('access_token');
+    Cookie::queue(Cookie::forget('state'));
+    Cookie::queue(Cookie::forget('code_verifier'));
+    Cookie::queue(Cookie::forget('access_token'));
 
     return [
         'message' => 'Cookies deleted!'
