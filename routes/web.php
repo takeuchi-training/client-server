@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Jobs\SendEmailJob;
+use App\Mail\SendEmailTest;
 use App\Models\PassportAccessToken;
 use App\Models\PassportClient;
 use App\Models\PassportVerifier;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -150,7 +152,8 @@ Route::middleware('auth')->group(function() {
 
 // Test queue
 Route::get('/email-test', function(){
-    $userEmail = 'test@test.com';
-    dispatch(new SendEmailJob($userEmail));
+    dispatch(new SendEmailJob());
+    // $email = new SendEmailTest();
+    // Mail::to('shouldGoBefore@test.com')->send($email);
     dd('done');
 });

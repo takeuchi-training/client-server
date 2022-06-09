@@ -11,9 +11,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewTrade implements ShouldBroadcast
+class NewTrade
 {
-    use Dispatchable, InteractsWithSockets, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $trade;
 
