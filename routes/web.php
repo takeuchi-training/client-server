@@ -113,14 +113,14 @@ Route::middleware('auth')->group(function() {
     });
 
     Route::get('/get-products-from-api', function (Request $request) {
-        $accessToken = PassportAccessToken::where('user_id', auth()->user()->id)->first()->access_token;
+        $accessToken = PassportAccessToken::where('user_id', auth()->user()->id)->first();
     
         if ($accessToken === null) {
             return redirect()->route('redirect');
         }
     
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $accessToken
+            'Authorization' => 'Bearer ' . $accessToken->access_token
         ])->get('http://localhost:8000/api/products');
      
         return $response->json();
