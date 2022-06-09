@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Jobs\SendEmailJob;
 use App\Models\PassportAccessToken;
 use App\Models\PassportClient;
 use App\Models\PassportVerifier;
@@ -23,6 +24,10 @@ use Illuminate\Support\Facades\Http;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/trades', function () {
+    return view('trades');
 });
 
 Route::controller(UserController::class)->group(function() {
@@ -143,3 +148,9 @@ Route::middleware('auth')->group(function() {
     });
 });
 
+// Test queue
+Route::get('/email-test', function(){
+    $userEmail = 'test@test.com';
+    dispatch(new SendEmailJob($userEmail));
+    dd('done');
+});
